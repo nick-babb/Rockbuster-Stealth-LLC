@@ -1,0 +1,19 @@
+1. Query to find the top 5 customers from the top 10 cities who’ve paid the highest total amounts to Rockbuster
+
+SELECT 
+  A.first_name,
+  A.last_name,
+  a.customer_id,
+  e.city,
+  F.country,
+  SUM(B.amount) AS amount_sum
+FROM customer A
+left JOIN payment B on A.customer_id = B.customer_id
+left JOIN store C ON B.staff_id = C.manager_staff_id
+left JOIN address D ON C.address_id = D.address_id
+left JOIN city E ON D.city_id = E.city_id
+full JOIN country F on E.country_id = F.country_id
+WHERE E.city IN ('Woodridge', 'Lethbridge')
+GROUP BY A.first_name, A.last_name, a.customer_id, e.city, F.country
+ORDER BY amount_sum DESC
+LIMIT 5
